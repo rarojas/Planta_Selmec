@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html ng-app="PlantaAPP">    
+    <head>
+        <title>Protocolo de Pruebas de Ensambel</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../js/libs/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="../js/libs/twitter-bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
+        <script src="../js/libs/angular.js/angular.js" type="text/javascript"></script>
+        <script src="../js/libs/angular.js/angular-resource.js" type="text/javascript"></script>
+        <script src="../js/libs/d3/d3.v3.js" type="text/javascript"></script>
+        <script src="../js/libs/nvd3/nv.d3.js" type="text/javascript"></script>        
+        <script src="../js/angular-timer/angular-timer.min.js" type="text/javascript"></script>
+        <script src="../js/libs/angular-directives-d3/angularjs-nvd3-directives.min.js" type="text/javascript"></script>
+        <script src="../js/app/app.js" type="text/javascript"></script>
+        <script src="../js/libs/n3-linecharts/line-chart.min.js" type="text/javascript"></script>
+        <link href="../js/libs/nvd3/nv.d3.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body ng-controller="PruebaSinCargaController">
+        <div class="container">            
+            <div class="row">
+                <div class="col-md-8">                    
+                    <div>
+                        <img src="../img/Logo Selmec.png" class="img-thumbnail" width="200" alt=""/>
+                    </div>
+                    <div>
+                        <h3>Puesta en Operación de plantas de Emergencia  - Caseta De Pruebas</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">                            
+                            <div class="row">                                
+                                <label class="col-md-4">Label</label>
+                                <label class="col-md-8">Folio</label>                               
+                            </div>
+                            <div class="row">                                
+                                <label class="col-md-4">Fecha</label>
+                                <label class="col-md-8">Fecha</label>                               
+                            </div>
+                            <div class="row">                                
+                                <label class="col-md-4">Hora</label>
+                                <label class="col-md-8">Hora</label>                               
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <h3>Incio de Prueba</h3>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success">
+                                Inicio                           
+                            </button>
+                            <button type="button" class="btn btn-danger">
+                                Fin                           
+                            </button>                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3>Controles de Planta</h3>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success" ng-click="Start()">
+                                START                           
+                            </button>
+                            <button type="button" class="btn btn-danger" ng-click="Stop()">
+                                STOP                           
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                TEST
+                            </button>                                                
+                        </div>
+                        <label ng-style="{color: Estado.color}" class="label">{{Estado.text}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h4>Video de Sitio</h4>
+                    <div>
+                        <img class="img-responsive" alt="" src="../img/Logo Selmec.png">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    Comentarios de la Prueba:
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Tipo de Incidencia:</label>
+                        <div class="col-md-8">
+                            <select class="form-control" ></select>
+                        </div>
+                    </div>
+                    <div class="form-group">                        
+                        <div class="col-md-12">
+                            <textarea class="form-control" placeholder="Comentarios..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>      
+
+            <div class="row">
+                <div class="col-md-4">
+                    Tablero de Mediciones
+                    <div class="row">       
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Tiempo de Actualización</label>                             
+                            <div class="col-md-8">
+                                <select ng-model="RefreshTime" ng-options="time  for time in RefreshTimes" class="form-control" required=""></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">                        
+                        <div class="col-md-12">                              
+                            <div style="width:400px;height: 300px">
+                                <linechart data="data" options="options" mode=""></linechart>
+                            </div>
+                        </div>        
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <table class="table table-condensed">
+                        <caption>
+                            <h4>
+                                Valores de Prueba
+                            </h4>
+                        </caption>
+                        <thead>
+                            <tr >
+                                <th>
+                                    Minutos
+                                </th>
+                                <th colspan="6" class="text-center">
+                                    Volts
+                                </th >
+                                <th>
+                                    HZ
+                                </th>
+                                <th>
+                                    °C
+                                </th>
+                                <th>
+                                    PSI
+                                </th>
+                                <th>
+                                    Amp
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Tiempo  
+                                </th>
+                                <th>
+                                    L1 - N
+                                </th>
+                                <th>
+                                    L2 - N  
+                                </th>
+                                <th>
+                                    L3 - N  
+                                </th>
+                                <th>
+                                    L1 - L2  
+                                </th>
+                                <th>
+                                    L2 - L3
+                                </th>
+                                <th>
+                                    L3 - L1
+                                </th>
+                                <th>
+                                    Frec
+                                </th>
+                                <th>
+                                    Temp.
+                                </th>
+                                <th>
+                                    Presión Aceite
+                                </th>
+                                <th>
+                                    Carga Alternador
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>                                    
+                                </th>
+                                <th>
+                                    {{now.L1N | number: 2}}  
+                                </th>
+                                <th>
+                                    {{now.L2N | number: 2}}  
+                                </th>
+                                <th>
+                                    {{now.L3N | number: 2}}  
+                                </th>
+                                <th>
+                                    {{now.L1L2 | number: 2}}  
+                                </th>
+                                <th>
+                                    {{now.L2L3 | number: 2}}  
+                                </th>
+                                <th>
+                                    {{now.L3L1 | number: 2}}  
+                                </th>
+                                <th>
+                                    {{now.HZ | number: 2}}  
+                                </th>
+                                <th>
+                                    {{now.Temp | number: 2}}  
+                                </th>
+                                 <th>
+                                    {{now.Presion | number: 2}}  
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-condensed">
+                        <caption>
+                            <h4>
+                                Valores Esperados
+                            </h4>
+                        </caption>
+                        <thead>
+                            <tr >
+                                <th>
+                                    Minutos
+                                </th>
+                                <th colspan="6" class="text-center">
+                                    Volts
+                                </th >
+                                <th>
+                                    HZ
+                                </th>
+                                <th>
+                                    °C
+                                </th>
+                                <th>
+                                    PSI
+                                </th>
+                                <th>
+                                    Amp
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>                                    
+                                </th>
+                                <th  ng-style="{'color': now.L1N > 122 || now.L1N < 118 ? 'red': 'green'}">
+                                    {{now.L1N - 2| number: 2}}  
+                                </th>
+                                <th  ng-style="{'color': now.L1N > 122 || now.L1N < 118 ? 'red': 'green'}">
+                                    {{now.L1N - 2| number: 2}}  
+                                </th>
+                                <th>
+                                    L3 - N  
+                                </th>
+                                <th>
+                                    L1 - L2  
+                                </th>
+                                <th>
+                                    L2 - L3
+                                </th>
+                                <th>
+                                    L3 - L1
+                                </th>
+                                <th>
+                                    Frec
+                                </th>
+                                <th>
+                                    Temp.
+                                </th>
+                                <th>
+                                    Presión Aceite
+                                </th>
+                                <th>
+                                    Carga Alternador
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {{now.time}}  
+                                </th>
+                                <th>
+                                    L1 - N
+                                </th>
+                                <th>
+                                    L2 - N  
+                                </th>
+                                <th>
+                                    L3 - N  
+                                </th>
+                                <th>
+                                    L1 - L2  
+                                </th>
+                                <th>
+                                    L2 - L3
+                                </th>
+                                <th>
+                                    L3 - L1
+                                </th>
+                                <th>
+                                    Frec
+                                </th>
+                                <th>
+                                    Temp.
+                                </th>
+                                <th>
+                                    Presión Aceite
+                                </th>
+                                <th>
+                                    Carga Alternador
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>
+
+                                </th>
+                                <th  ng-style="{'color': now.L1N > 122 || now.L1N < 118 ? 'red': 'green'}">
+                                    {{now.L1N| number: 2}}  
+                                </th>
+                                <th  ng-style="{'color': now.L1N > 122 || now.L1N < 118 ? 'red': 'green'}">
+                                    {{now.L1N| number: 2}}  
+                                </th>
+                                <th>
+                                    L3 - N  
+                                </th>
+                                <th>
+                                    L1 - L2  
+                                </th>
+                                <th>
+                                    L2 - L3
+                                </th>
+                                <th>
+                                    L3 - L1
+                                </th>
+                                <th>
+                                    Frec
+                                </th>
+                                <th>
+                                    Temp.
+                                </th>
+                                <th>
+                                    Presión Aceite
+                                </th>
+                                <th>
+                                    Carga Alternador
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="telemetria_enesa" match-schema="informix"/>
+  <table-filter match-name="tablahorarioverano"/>
+  <table-filter match-name="tablafrecuencias"/>
+  <table-filter match-name="tablacontactos"/>
+  <table-filter match-name="tablaedopais"/>
+  <table-filter match-name="tablalectura"/>
+  <table-filter match-name="tablasitios"/>
+  <table-filter match-name="tablaclientes"/>
+  <table-filter match-name="tablapoblaciones"/>
+</hibernate-reverse-engineering>
